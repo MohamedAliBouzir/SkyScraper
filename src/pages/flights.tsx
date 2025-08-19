@@ -1,7 +1,19 @@
-import { Box, Typography } from "@mui/material";
-import TestServerButton from "../components/ButtonUseTest";
+import { Typography, Box } from "@mui/material";
+import SearchInput from "../components/SearchInput";
+import SearchIcon from "@mui/icons-material/Search";
+import FlightIcon from "@mui/icons-material/Flight";
+import { useAirportSearch } from "../hooks/useAirportSearch";
+
 
 const flights = () => {
+    const { setQuery, suggestions, isLoading } = useAirportSearch();
+
+  const formattedResults = suggestions.map(suggestion => ({
+    text: suggestion.presentation.title,
+    subText: suggestion.presentation.subtitle || suggestion.navigation.entityType,
+    icon: <FlightIcon />,
+    data: suggestion
+  }));
   return (
     <Box
       sx={{
@@ -44,6 +56,30 @@ const flights = () => {
         >
           Flights
         </Typography>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <SearchInput
+          onSearch={setQuery}
+          icon={<SearchIcon />}
+          placeholder="Search airports"
+          width={{ xs: "100%", md: "40%" }}
+          results={formattedResults}
+          isLoading={isLoading}
+          sx={{
+            borderRadius: "50px",
+            minWidth: "100px",
+            backgroundColor: "#fff",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.19)",
+          }}
+        />
       </Box>
     </Box>
   );

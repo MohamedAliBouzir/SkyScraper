@@ -20,3 +20,21 @@ export interface SearchResult {
   icon?: React.ReactNode;
   data?: any;
 }
+
+export interface SearchSuggestion {
+  hierarchy: string;
+  location: string;
+  score: number;
+  entityName: string;
+  entityId: string;
+  entityType: string;
+  suggestItem: string;
+  class: string;
+  pois: any | null;
+}
+
+export interface SearchEverythingResponse {
+  status: boolean;
+  timestamp: number;
+  data: SearchSuggestion[];
+}

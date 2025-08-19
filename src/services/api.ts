@@ -32,6 +32,7 @@ apiClient.interceptors.response.use(
 export const API_ENDPOINTS = {
   CHECK_SERVER: '/api/v1/checkServer',
   AIRPORT_SEARCH: '/api/v1/flights/searchAirport',
+  SEARCH_EVERYTHING: '/api/v1/hotels/searchDestinationOrHotel'
 };
 
 export const fetcher = <T>(
@@ -44,29 +45,7 @@ export const fetcher = <T>(
   });
 };
 
-export const getFetcher = <T>(url: string, params?: any): Promise<T> =>
-  fetcher<T>(url, { method: 'GET', params });
 
-export const postFetcher = <T>(url: string, data?: any): Promise<T> =>
-  fetcher<T>(url, { method: 'POST', data });
-
-export const putFetcher = <T>(url: string, data?: any): Promise<T> =>
-  fetcher<T>(url, { method: 'PUT', data });
-
-export const deleteFetcher = <T>(url: string): Promise<T> =>
-  fetcher<T>(url, { method: 'DELETE' });
-
-export const apiGet = <T>(url: string, params?: any) => 
-  apiClient.get<T>(url, { params });
-
-export const apiPost = <T>(url: string, data?: any) => 
-  apiClient.post<T>(url, data);
-
-export const apiPut = <T>(url: string, data?: any) => 
-  apiClient.put<T>(url, data);
-
-export const apiDelete = <T>(url: string) => 
-  apiClient.delete<T>(url);
 
 export interface ServerStatus {
   status: boolean;

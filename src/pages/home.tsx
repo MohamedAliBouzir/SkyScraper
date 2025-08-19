@@ -7,7 +7,8 @@ import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { type ReactElement } from "react";
-import { useAirportSearch } from "../hooks/useAirportSearch";
+import { useSearchEverything } from "../hooks/useSearchEverything";
+import { getEntityIcon } from "../utils/entityIcons";
 
 const iconMap: Record<string, ReactElement> = {
   flights: <FlightIcon />,
@@ -22,13 +23,14 @@ const Home = () => {
     RentingMenu.carsPage,
   ];
 
-  const { setQuery, suggestions, isLoading } = useAirportSearch();
+  const { setQuery, suggestions, isLoading } = useSearchEverything();
 
   const formattedResults = suggestions.map(suggestion => ({
-    text: suggestion.presentation.title,
-    subText: suggestion.presentation.subtitle || suggestion.navigation.entityType,
-    icon: <FlightIcon />,
-    data: suggestion
+    text: suggestion.entityName,
+    subText: suggestion.hierarchy,
+    icon: getEntityIcon(suggestion.entityType),
+    data: suggestion,
+    entityType: suggestion.entityType,
   }));
 
   return (
@@ -86,7 +88,7 @@ const Home = () => {
         <SearchInput
           onSearch={setQuery}
           icon={<SearchIcon />}
-          placeholder="Search airports, cities, or countries..."
+          placeholder="Search flights, hotels, cities, airports, attractions..."
           width={{ xs: "100%", md: "40%" }}
           results={formattedResults}
           isLoading={isLoading}

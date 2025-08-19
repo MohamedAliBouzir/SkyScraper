@@ -11,4 +11,12 @@ export interface SearchInputProps {
     | Partial<Record<"xs" | "sm" | "md" | "lg" | "xl", number | string>>;
   sx?: SxProps;
   results?: any[];
+  isLoading?: boolean;
+}
+
+export interface SearchResult {
+  text: string;
+  subText: string;
+  icon?: React.ReactNode;
+  data?: any;
 }

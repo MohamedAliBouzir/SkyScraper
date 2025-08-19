@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import { useState, type ReactElement } from "react";
+import { type ReactElement } from "react";
+import { useAirportSearch } from "../hooks/useAirportSearch";
 
 const iconMap: Record<string, ReactElement> = {
   flights: <FlightIcon />,
@@ -21,25 +22,15 @@ const Home = () => {
     RentingMenu.carsPage,
   ];
 
-  const [results, setResults] = useState<any[]>([]);
+  const { query, setQuery, suggestions, isLoading } = useAirportSearch();
 
-  const handleSearch = async (query: string) => {
-    console.log("Searching:", query);
-
-    if (!query) {
-      setResults([]);
-      return;
-    }
-
-    // Example API call
-    const fakeResults = [
-      { text: "Zarzis", subText: "Ville en Tunisie", icon: <FlightIcon /> },
-      { text: "Zarat", subText: "Ville en Tunisie", icon: <FlightIcon /> },
-      { text: "zarzis hotel", subText: "", icon: <HotelIcon /> },
-      { text: "zarzis maps", subText: "", icon: <SearchIcon /> },
-    ];
-    setResults(fakeResults);
-  };
+  // Format suggestions for SearchInput component
+  const formattedResults = suggestions.map(suggestion => ({
+    text: suggestion.presentation.title,
+    subText: suggestion.presentation.subtitle || suggestion.navigation.entityType,
+    icon: <FlightIcon />,
+    data: suggestion
+  }));
 
   return (
     <Box
@@ -94,11 +85,12 @@ const Home = () => {
         }}
       >
         <SearchInput
-          onSearch={handleSearch}
+          onSearch={setQuery}
           icon={<SearchIcon />}
-          placeholder="Search Flights, Hotels and many more..."
+          placeholder="Search airports, cities, or countries..."
           width={{ xs: "100%", md: "40%" }}
-          results={results}
+          results={formattedResults}
+          isLoading={isLoading}
           sx={{
             borderRadius: "50px",
             minWidth: "100px",

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useRef, useEffect } from "react";
 import {
   TextField,
   IconButton,
@@ -10,7 +10,7 @@ import {
   ListItemIcon,
   ListItemButton,
   Box,
-  CircularProgress, // ADD THIS
+  CircularProgress,
 } from "@mui/material";
 import _ from "lodash";
 import type { SearchInputProps } from "../interfaces/components-interfaces";
@@ -21,33 +21,72 @@ const SearchInput: React.FC<SearchInputProps> = ({
   icon,
   width,
   results,
-  isLoading = false, // ADD DEFAULT
+  isLoading = false,
   sx,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [hasSearched, setHasSearched] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const debouncedSearch = useMemo(
-    () => _.debounce((query: string) => onSearch(query), 500),
+    () => _.debounce((query: string) => {
+      if (query.trim() !== '') {
+        setHasSearched(true);
+        onSearch(query);
+      } else {
+        setHasSearched(false);
+      }
+    }, 500),
     [onSearch]
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
       setSearchTerm(value);
-      debouncedSearch(value);
+      
+      if (value.trim() === '') {
+        onSearch('');
+        debouncedSearch.cancel();
+        setHasSearched(false);
+        setIsDropdownOpen(false);
+      } else {
+        debouncedSearch(value);
+        setIsDropdownOpen(true);
+      }
     },
-    [debouncedSearch]
+    [debouncedSearch, onSearch]
   );
+
+  const handleInputFocus = useCallback(() => {
+    if (searchTerm.trim() !== '' && ((results?.length ?? 0) > 0 || hasSearched)) {
+      setIsDropdownOpen(true);
+    }
+  }, [searchTerm, results, hasSearched]);
 
   const handleResultClick = useCallback((result: any) => {
     setSearchTerm(result.text);
-    // You might want to call onSearch with the selected result
-    // or handle it differently based on your needs
+    setIsDropdownOpen(false);
   }, []);
 
+  const shouldShowResults = isDropdownOpen && searchTerm.trim() !== '' && results && results.length > 0;
   return (
     <Box
+      ref={searchRef}
       sx={{
         position: "relative",
         width: width,
@@ -58,6 +97,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
       <TextField
         value={searchTerm}
         onChange={handleChange}
+        onFocus={handleInputFocus}
         variant="outlined"
         placeholder={placeholder || undefined}
         fullWidth
@@ -67,7 +107,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
               <IconButton edge="start">{icon}</IconButton>
             </InputAdornment>
           ) : undefined,
-          endAdornment: isLoading ? ( // ADD LOADING INDICATOR
+          endAdornment: isLoading ? (
             <InputAdornment position="end">
               <CircularProgress size={20} />
             </InputAdornment>
@@ -79,9 +119,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           backgroundColor: "#fff",
         }}
       />
-      
-      {/* Results Dropdown */}
-      {results && results.length > 0 && (
+      {shouldShowResults && (
         <Paper
           sx={{
             position: "absolute",
@@ -89,7 +127,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
             left: 0,
             right: 0,
             mt: 1,
-            zIndex: 1300, // Higher z-index
+            zIndex: 1300,
             maxHeight: 300,
             overflowY: "auto",
             borderRadius: "12px",
@@ -116,31 +154,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
               </ListItem>
             ))}
           </List>
-        </Paper>
-      )}
-
-      {/* No Results Found */}
-      {searchTerm && results && results.length === 0 && !isLoading && (
-        <Paper
-          sx={{
-            position: "absolute",
-            top: "100%",
-            left: 0,
-            right: 0,
-            mt: 1,
-            zIndex: 1300,
-            p: 2,
-            borderRadius: "12px",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-          }}
-        >
-          <ListItemText 
-            primary="No results found" 
-            primaryTypographyProps={{
-              color: "text.secondary",
-              textAlign: "center",
-            }}
-          />
         </Paper>
       )}
     </Box>

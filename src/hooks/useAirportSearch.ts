@@ -15,7 +15,6 @@ export const useAirportSearch = (): UseAirportSearchReturn => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Debounce the query
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
@@ -26,13 +25,15 @@ export const useAirportSearch = (): UseAirportSearchReturn => {
     };
   }, [query]);
 
-  // SWR hook for API call
   const { data, error, isLoading } = useSWR<AirportSearchResponse>(
-    debouncedQuery ? `${API_ENDPOINTS.AIRPORT_SEARCH}?query=${encodeURIComponent(debouncedQuery)}` : null,
+    debouncedQuery.trim() !== '' 
+      ? `${API_ENDPOINTS.AIRPORT_SEARCH}?query=${encodeURIComponent(debouncedQuery)}` 
+      : null,
     fetcher,
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
+      dedupingInterval: 30000,
     }
   );
 

@@ -1,5 +1,5 @@
-import useSWR from 'swr';
-import { API_ENDPOINTS, type ServerStatus, fetcher } from '../services/api';
+import useSWR from "swr";
+import { API_ENDPOINTS, type ServerStatus, fetcher } from "../services/api";
 
 interface UseTestServerReturn {
   data: ServerStatus | undefined;
@@ -10,18 +10,15 @@ interface UseTestServerReturn {
 }
 
 export const useTestServer = (): UseTestServerReturn => {
-  const {
-    data,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR<ServerStatus>(
+  const { data, error, isLoading, mutate } = useSWR<ServerStatus>(
     API_ENDPOINTS.CHECK_SERVER,
     fetcher,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
       shouldRetryOnError: false,
+      revalidateIfStale: false,
+      revalidateOnMount: false,
       dedupingInterval: 60000,
     }
   );

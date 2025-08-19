@@ -20,12 +20,10 @@ export const TestServerButton: React.FC = () => {
   return (
     <Paper elevation={2} sx={{ p: 3, maxWidth: 400, mx: 'auto', mt: 4 }}>
       <Box sx={{ textAlign: 'center' }}>
-        {/* Title */}
         <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
           <CloudIcon /> Server Connection Test
         </Typography>
 
-        {/* Test Button */}
         <Button
           variant="contained"
           onClick={handleTestServer}
@@ -36,7 +34,6 @@ export const TestServerButton: React.FC = () => {
           {isLoading ? 'Testing...' : 'Test Server Connection'}
         </Button>
 
-        {/* Results Display */}
         {data && !isLoading && (
           <Alert 
             severity={data.status ? 'success' : 'warning'} 

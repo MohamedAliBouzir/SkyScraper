@@ -1,6 +1,5 @@
 import axios, { type AxiosResponse, type AxiosRequestConfig } from 'axios';
 
-// Base API client configuration
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
@@ -11,11 +10,8 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-// Request interceptor for adding auth tokens if needed
 apiClient.interceptors.request.use(
   (config) => {
-    // You can add auth tokens or other headers here
-    // config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {
@@ -23,7 +19,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     return response.data;
@@ -34,15 +29,11 @@ apiClient.interceptors.response.use(
   }
 );
 
-// API endpoints
 export const API_ENDPOINTS = {
   CHECK_SERVER: '/api/v1/checkServer',
-  FLIGHTS_SEARCH: '/api/v1/flights/search',
-  FLIGHTS_DETAILS: '/api/v1/flights/detail',
-  AIRPORT_SEARCH: '/api/v1/flights/searchAirport', // NEW
+  AIRPORT_SEARCH: '/api/v1/flights/searchAirport',
 };
 
-// Enhanced fetcher that supports all HTTP methods and configurations
 export const fetcher = <T>(
   url: string, 
   config?: AxiosRequestConfig
@@ -53,7 +44,6 @@ export const fetcher = <T>(
   });
 };
 
-// Method-specific fetchers
 export const getFetcher = <T>(url: string, params?: any): Promise<T> =>
   fetcher<T>(url, { method: 'GET', params });
 
@@ -66,7 +56,6 @@ export const putFetcher = <T>(url: string, data?: any): Promise<T> =>
 export const deleteFetcher = <T>(url: string): Promise<T> =>
   fetcher<T>(url, { method: 'DELETE' });
 
-// Generic API call functions
 export const apiGet = <T>(url: string, params?: any) => 
   apiClient.get<T>(url, { params });
 
@@ -79,15 +68,11 @@ export const apiPut = <T>(url: string, data?: any) =>
 export const apiDelete = <T>(url: string) => 
   apiClient.delete<T>(url);
 
-// ===== EXISTING INTERFACES =====
-
-// Interface for Server Status (for useTestServer)
 export interface ServerStatus {
   status: boolean;
   message: string;
 }
 
-// Interface for Flight Search (example - will change based on actual API)
 export interface FlightSearchParams {
   origin: string;
   destination: string;
@@ -110,8 +95,6 @@ export interface FlightSearchResponse {
   totalResults: number;
   searchParams: FlightSearchParams;
 }
-
-// ===== NEW INTERFACES FOR AIRPORT SEARCH =====
 
 export interface AirportSuggestion {
   skyId: string;

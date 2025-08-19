@@ -22,9 +22,8 @@ const Home = () => {
     RentingMenu.carsPage,
   ];
 
-  const { query, setQuery, suggestions, isLoading } = useAirportSearch();
+  const { setQuery, suggestions, isLoading } = useAirportSearch();
 
-  // Format suggestions for SearchInput component
   const formattedResults = suggestions.map(suggestion => ({
     text: suggestion.presentation.title,
     subText: suggestion.presentation.subtitle || suggestion.navigation.entityType,

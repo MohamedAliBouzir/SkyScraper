@@ -3,6 +3,8 @@ import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { useLocation, Link } from "react-router-dom";
 import { homeMenu, RentingMenu } from "../../menu";
 import FullLogo from "../../assets/icons/FullLogo.tsx";
+import { HeaderStyle } from "../../styles";
+
 const Header: React.FC = () => {
   const location = useLocation();
 
@@ -14,26 +16,18 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <AppBar
-      sx={{
-        backgroundColor: "white",
-        color: "text.primary",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-      }}
-    >
-      <Toolbar sx={{ justifyContent: "space-around" }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+    <AppBar sx={HeaderStyle.appBar}>
+      <Toolbar sx={HeaderStyle.toolBar}>
+        <Box sx={HeaderStyle.logoHolder}>
           <FullLogo />
         </Box>
-
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            gap: 3,
-          }}
-        >
+        <Box sx={HeaderStyle.itemsContainer}>
           {menuItems.map((item) => (
-            <Link to={item.path} key={item.id} style={{ textDecoration: "none" }}>
+            <Link
+              to={item.path}
+              key={item.id}
+              style={{ textDecoration: "none" }}
+            >
               <Typography
                 key={item.id}
                 sx={{
@@ -53,16 +47,9 @@ const Header: React.FC = () => {
             </Link>
           ))}
         </Box>
-
         {/* Placeholder for right side - hidden on mobile */}
-        <Box
-          sx={{
-            display: { xs: "none", md: "block" },
-            width: 48, // keeps layout balanced
-          }}
-        />
+        <Box sx={HeaderStyle.PlaceHolder} />
 
-        {/* Mobile placeholder */}
         <Typography
           variant="h6"
           sx={{

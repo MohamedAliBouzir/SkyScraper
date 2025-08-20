@@ -16,7 +16,6 @@ export const useSearchEverything = (): UseSearchEverythingReturn => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Debounce the query
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
@@ -27,7 +26,6 @@ export const useSearchEverything = (): UseSearchEverythingReturn => {
     };
   }, [query]);
 
-  // SWR hook for API call - using the new getEverything endpoint
   const { data, error, isLoading } = useSWR<SearchEverythingResponse>(
     debouncedQuery.trim() !== '' 
       ? `${API_ENDPOINTS.SEARCH_EVERYTHING}?query=${encodeURIComponent(debouncedQuery)}` 

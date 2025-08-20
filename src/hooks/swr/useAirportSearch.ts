@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { API_ENDPOINTS, type AirportSearchResponse, type AirportSuggestion, fetcher } from '../../services/api';
+import { API_ENDPOINTS, fetcher } from '../../services/api';
+import type { IAirportSearchResponse, IUseAirportSearchReturn } from '../../interfaces/Mappers/flight-api.interface';
 
 
-interface UseAirportSearchReturn {
-  query: string;
-  setQuery: (query: string) => void;
-  suggestions: AirportSuggestion[];
-  isLoading: boolean;
-  error: Error | undefined;
-}
 
-export const useAirportSearch = (): UseAirportSearchReturn => {
+
+export const useAirportSearch = (): IUseAirportSearchReturn => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
@@ -25,7 +20,7 @@ export const useAirportSearch = (): UseAirportSearchReturn => {
     };
   }, [query]);
 
-  const { data, error, isLoading } = useSWR<AirportSearchResponse>(
+  const { data, error, isLoading } = useSWR<IAirportSearchResponse>(
     debouncedQuery.trim() !== '' 
       ? `${API_ENDPOINTS.AIRPORT_SEARCH}?query=${encodeURIComponent(debouncedQuery)}` 
       : null,

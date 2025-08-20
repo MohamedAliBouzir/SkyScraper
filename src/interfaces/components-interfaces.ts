@@ -1,8 +1,8 @@
 import type { SxProps } from "@mui/material";
 
-export interface SearchInputProps {
+export interface ISearchInputProps {
   onSearch: (query: string) => void;
-  onResultClick?: (result: SearchResult) => void;
+  onResultClick?: (result: ISearchResult) => void;
   icon?: React.ReactNode;
   placeholder?: string;
   width?:
@@ -15,14 +15,14 @@ export interface SearchInputProps {
   isLoading?: boolean;
 }
 
-export interface SearchResult {
+export interface ISearchResult {
   text: string;
   subText: string;
   icon?: React.ReactNode;
   data?: any;
 }
 
-export interface SearchSuggestion {
+export interface ISearchSuggestion {
   hierarchy: string;
   location: string;
   score: number;
@@ -32,11 +32,5 @@ export interface SearchSuggestion {
   suggestItem: string;
   class: string;
   pois: any | null;
-}
-
-export interface SearchEverythingResponse {
-  status: boolean;
-  timestamp: number;
-  data: SearchSuggestion[];
 }
 

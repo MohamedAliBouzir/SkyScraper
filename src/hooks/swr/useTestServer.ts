@@ -1,16 +1,12 @@
 import useSWR from "swr";
-import { API_ENDPOINTS, type ServerStatus, fetcher } from "../../services/api";
+import { API_ENDPOINTS, fetcher } from "../../services/api";
+import type {
+  IServerStatus,
+  IUseTestServerReturn,
+} from "../../interfaces/Mappers/api.interface";
 
-interface UseTestServerReturn {
-  data: ServerStatus | undefined;
-  isLoading: boolean;
-  error: Error | undefined;
-  isError: boolean;
-  refetch: () => void;
-}
-
-export const useTestServer = (): UseTestServerReturn => {
-  const { data, error, isLoading, mutate } = useSWR<ServerStatus>(
+export const useTestServer = (): IUseTestServerReturn => {
+  const { data, error, isLoading, mutate } = useSWR<IServerStatus>(
     API_ENDPOINTS.CHECK_SERVER,
     fetcher,
     {

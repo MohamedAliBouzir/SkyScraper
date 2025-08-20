@@ -2,6 +2,7 @@ import type { SxProps } from "@mui/material";
 
 export interface SearchInputProps {
   onSearch: (query: string) => void;
+  onResultClick?: (result: SearchResult) => void;
   icon?: React.ReactNode;
   placeholder?: string;
   width?:
@@ -38,3 +39,4 @@ export interface SearchEverythingResponse {
   timestamp: number;
   data: SearchSuggestion[];
 }
+

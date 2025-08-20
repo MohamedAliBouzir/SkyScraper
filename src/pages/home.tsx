@@ -7,8 +7,9 @@ import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { type ReactElement } from "react";
-import { useSearchEverything } from "../hooks/useSearchEverything";
+import { useSearchEverything } from "../hooks/swr/useSearchEverything";
 import { getEntityIcon } from "../utils/entityIcons";
+import type { SearchResult } from "../interfaces/components-interfaces";
 
 const iconMap: Record<string, ReactElement> = {
   flights: <FlightIcon />,
@@ -24,6 +25,12 @@ const Home = () => {
   ];
 
   const { setQuery, suggestions, isLoading } = useSearchEverything();
+
+  const handleResultClick = (result: SearchResult) => {
+    const searchQuery = encodeURIComponent(result.text);
+    const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}&tcfs=UgRgAXgB`;
+    window.open(googleSearchUrl, '_blank', 'noopener,noreferrer');
+  };
 
   const formattedResults = suggestions.map(suggestion => ({
     text: suggestion.entityName,
@@ -87,6 +94,7 @@ const Home = () => {
       >
         <SearchInput
           onSearch={setQuery}
+          onResultClick={handleResultClick}
           icon={<SearchIcon />}
           placeholder="Search flights, hotels, cities, airports, attractions..."
           width={{ xs: "100%", md: "40%" }}

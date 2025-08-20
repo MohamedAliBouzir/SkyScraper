@@ -8,7 +8,7 @@ import {
   Paper
 } from '@mui/material';
 import { Refresh as RefreshIcon, Cloud as CloudIcon } from '@mui/icons-material';
-import { useTestServer } from '../hooks/useTestServer';
+import { useTestServer } from '../hooks/swr/useTestServer';
 
 export const TestServerButton: React.FC = () => {
   const { data, isLoading, error, isError, refetch } = useTestServer();

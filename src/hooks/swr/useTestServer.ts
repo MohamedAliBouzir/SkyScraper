@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { API_ENDPOINTS, type ServerStatus, fetcher } from "../services/api";
+import { API_ENDPOINTS, type ServerStatus, fetcher } from "../../services/api";
 
 interface UseTestServerReturn {
   data: ServerStatus | undefined;

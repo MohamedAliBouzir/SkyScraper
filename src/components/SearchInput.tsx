@@ -24,6 +24,7 @@ import { SearchInputStyle } from "../styles";
 
 const SearchInput: React.FC<SearchInputProps> = ({
   onSearch,
+  onResultClick,
   placeholder,
   icon,
   width,
@@ -93,15 +94,21 @@ const SearchInput: React.FC<SearchInputProps> = ({
   }, [searchTerm, results, hasSearched]);
 
   const handleResultClick = useCallback((result: any) => {
-    setSearchTerm(result.text);
-    const searchQuery = encodeURIComponent(result.text);
-    const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}&tcfs=UgRgAXgB`;
-    window.open(googleSearchUrl, '_blank', 'noopener,noreferrer');
+    if (onResultClick) {
+      onResultClick(result);
+    }
     setIsDropdownOpen(false);
-  }, []);
+  }, [onResultClick]);
+
+  const handleInputClick = useCallback(() => {
+    if (searchTerm.trim() !== "" && ((results?.length ?? 0) > 0 || hasSearched)) {
+      setIsDropdownOpen(true);
+    }
+  }, [searchTerm, results, hasSearched]);
 
   const shouldShowResults =
     isDropdownOpen && searchTerm.trim() !== "" && results && results.length > 0;
+
   return (
     <Box
       ref={searchRef}
@@ -116,6 +123,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
         value={searchTerm}
         onChange={handleChange}
         onFocus={handleInputFocus}
+        onClick={handleInputClick}
         variant="outlined"
         placeholder={placeholder || undefined}
         fullWidth

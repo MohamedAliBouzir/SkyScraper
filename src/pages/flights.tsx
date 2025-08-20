@@ -2,7 +2,7 @@ import { Typography, Box } from "@mui/material";
 import SearchInput from "../components/SearchInput";
 import SearchIcon from "@mui/icons-material/Search";
 import FlightIcon from "@mui/icons-material/Flight";
-import { useAirportSearch } from "../hooks/useAirportSearch";
+import { useAirportSearch } from "../hooks/swr/useAirportSearch";
 
 
 const flights = () => {

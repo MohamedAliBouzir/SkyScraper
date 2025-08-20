@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { API_ENDPOINTS, type AirportSearchResponse, type AirportSuggestion } from '../services/api';
-import { fetcher } from '../services/api';
+import { API_ENDPOINTS, fetcher } from '../../services/api';
+import type { SearchEverythingResponse, SearchSuggestion } from '../../interfaces/components-interfaces';
 
-interface UseAirportSearchReturn {
+interface UseSearchEverythingReturn {
   query: string;
   setQuery: (query: string) => void;
-  suggestions: AirportSuggestion[];
+  suggestions: SearchSuggestion[];
   isLoading: boolean;
   error: Error | undefined;
 }
 
-export const useAirportSearch = (): UseAirportSearchReturn => {
+export const useSearchEverything = (): UseSearchEverythingReturn => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
@@ -25,9 +25,9 @@ export const useAirportSearch = (): UseAirportSearchReturn => {
     };
   }, [query]);
 
-  const { data, error, isLoading } = useSWR<AirportSearchResponse>(
+  const { data, error, isLoading } = useSWR<SearchEverythingResponse>(
     debouncedQuery.trim() !== '' 
-      ? `${API_ENDPOINTS.AIRPORT_SEARCH}?query=${encodeURIComponent(debouncedQuery)}` 
+      ? `${API_ENDPOINTS.SEARCH_EVERYTHING}?query=${encodeURIComponent(debouncedQuery)}` 
       : null,
     fetcher,
     {

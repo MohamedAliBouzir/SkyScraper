@@ -10,6 +10,8 @@ import { type ReactElement } from "react";
 import { useSearchEverything } from "../hooks/swr/useSearchEverything";
 import { getEntityIcon } from "../utils/entityIcons";
 import type { SearchResult } from "../interfaces/components-interfaces";
+import PageCommonTitle from "../components/UI/PageCommonTitle";
+import { CommonStyle } from "../styles";
 
 const iconMap: Record<string, ReactElement> = {
   flights: <FlightIcon />,
@@ -29,10 +31,10 @@ const Home = () => {
   const handleResultClick = (result: SearchResult) => {
     const searchQuery = encodeURIComponent(result.text);
     const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}&tcfs=UgRgAXgB`;
-    window.open(googleSearchUrl, '_blank', 'noopener,noreferrer');
+    window.open(googleSearchUrl, "_blank", "noopener,noreferrer");
   };
 
-  const formattedResults = suggestions.map(suggestion => ({
+  const formattedResults = suggestions.map((suggestion) => ({
     text: suggestion.entityName,
     subText: suggestion.hierarchy,
     icon: getEntityIcon(suggestion.entityType),
@@ -41,57 +43,14 @@ const Home = () => {
   }));
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 2,
-        mt: { xs: "-2%", sm: "-1%" },
-      }}
-    >
-      <Box
-        sx={{
-          width: "100%",
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <img
-          src="https://www.gstatic.com/travel-frontend/animation/hero/trips_4.svg"
-          alt="Hero"
-          style={{ width: "100%", height: "auto", display: "block" }}
-        />
-        <Typography
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            textAlign: "center",
-            fontFamily: "monospace",
-            fontSize: {
-              xs: "1rem",
-              sm: "2rem",
-              md: "2.5rem",
-              lg: "3rem",
-            },
-            color: "#333333ff",
-          }}
-        >
-          Let's Plan a Trip
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
+    <Box sx={CommonStyle.pageWrapper}>
+      <PageCommonTitle
+        src="https://www.gstatic.com/travel-frontend/animation/hero/trips_4.svg"
+        alt="Hero"
+        text="Let's Plan a Trip"
+        imgStyle={{ width: "100%", height: "auto", display: "block" }}
+      />
+      <Box sx={CommonStyle.contentWrapper}>
         <SearchInput
           onSearch={setQuery}
           onResultClick={handleResultClick}

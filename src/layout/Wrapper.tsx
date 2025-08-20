@@ -4,6 +4,7 @@ import type { IWrapperProps } from "./../interfaces/layout-interface";
 import Header from "./Header/Header";
 import { Box, Toolbar } from "@mui/material";
 import PageLayout from "./PageLayout";
+import { LayoutStyle } from "../styles";
 
 export const WrapperContainer: FC<IWrapperProps> = ({ children, ...props }) => {
   return (
@@ -12,7 +13,7 @@ export const WrapperContainer: FC<IWrapperProps> = ({ children, ...props }) => {
       <Toolbar />
       <Box
         component="main"
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        sx={LayoutStyle.wrapperLayout}
       >
         <PageLayout> {children}</PageLayout>
       </Box>

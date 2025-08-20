@@ -1,12 +1,10 @@
 import { CircularProgress, Box } from '@mui/material';
+import { LoadingScreenStyle } from '../styles';
 
 export const LoadingScreen: React.FC = () => {
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="200px"
+      sx={LoadingScreenStyle.LoadingContainer}
     >
       <CircularProgress />
     </Box>

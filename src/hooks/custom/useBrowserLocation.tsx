@@ -9,6 +9,7 @@ export const useBrowserLocation = (): TBrowserLocation => {
     error: null,
   });
 
+  const hasFetchedLocation = useRef(false);
   const prevLocationRef = useRef<{ lat: number | null; lng: number | null }>({
     lat: null,
     lng: null,
@@ -18,30 +19,46 @@ export const useBrowserLocation = (): TBrowserLocation => {
     const prev = prevLocationRef.current;
     if (prev.lat !== lat || prev.lng !== lng) {
       prevLocationRef.current = { lat, lng };
-      setLocation({ latitude: lat, longitude: lng, loading: false, error: null });
-    } else {
-      setLocation((l) => ({ ...l, loading: false }));
+      setLocation({
+        latitude: lat,
+        longitude: lng,
+        loading: false,
+        error: null,
+      });
     }
   }, []);
 
   useEffect(() => {
-    const getLocation = () => {
-      if (!("geolocation" in navigator)) {
-        setLocation({ latitude: null, longitude: null, loading: false, error: "Geolocation not supported" });
-        return;
-      }
+    if (hasFetchedLocation.current) return;
+    hasFetchedLocation.current = true;
 
-      navigator.geolocation.getCurrentPosition(
-        (pos) => updateLocation(pos.coords.latitude, pos.coords.longitude),
-        (err) => {
-          console.warn("Geolocation error:", err.message);
-          setLocation({ latitude: null, longitude: null, loading: false, error: err.message });
-        }
-      );
+    const geoOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 300000,
     };
 
-    getLocation();
+    navigator.geolocation.getCurrentPosition(
+      (pos) => updateLocation(pos.coords.latitude, pos.coords.longitude),
+      (err) => {
+        setLocation((prev) => {
+          if (prev.error !== err.message) {
+            return {
+              latitude: null,
+              longitude: null,
+              loading: false,
+              error: err.message,
+            };
+          }
+          return prev;
+        });
+      },
+      geoOptions
+    );
   }, [updateLocation]);
 
-  return useMemo(() => location, [location]);
+  return useMemo(
+    () => location,
+    [location.latitude, location.longitude, location.loading, location.error]
+  );
 };

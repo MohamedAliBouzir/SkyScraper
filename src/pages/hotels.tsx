@@ -1,11 +1,18 @@
-import { Box, CircularProgress, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material";
 import { useLocation } from "../providers/GeoLocation.provider";
+import { useEffect, useRef } from "react";
 
-const hotels = () => {
-
+const Hotels = () => {
   const { latitude, longitude, loading, error } = useLocation();
+  const hasLogged = useRef(false);
 
-  console.log(latitude, longitude, loading, error);
+  useEffect(() => {
+    if (!hasLogged.current && !loading) {
+      console.log("Location data:", { latitude, longitude, loading, error });
+      hasLogged.current = true;
+    }
+  }, [latitude, longitude, loading, error]);
+
   return (
     <Box
       sx={{
@@ -28,7 +35,12 @@ const hotels = () => {
         <img
           src="https://storage.googleapis.com/support-kms-prod/P5uaVGK0eWz7PTNic8xuyV0cyiq5VW0EnUFO"
           alt="Flights Hero"
-          style={{ width: "100%", height: "auto", maxHeight:"360px", display: "block" }}
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: "360px",
+            display: "block",
+          }}
         />
         <Typography
           sx={{
@@ -50,7 +62,7 @@ const hotels = () => {
         </Typography>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default hotels
+export default Hotels;

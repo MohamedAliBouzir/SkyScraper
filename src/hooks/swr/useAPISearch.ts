@@ -1,45 +1,18 @@
-import { useState, useEffect } from 'react';
-import useSWR from 'swr';
-import { API_ENDPOINTS, fetcher } from '../../services/api';
-import type { 
-  IAirportSearchResponse, 
-} from '../../interfaces/Interceptors/flight-api.interface';
-import type { 
-  ICarSearchResponse, 
-} from '../../interfaces/Interceptors/cars-api.interface';
-import type { 
-  ISearchEverythingResponse, 
-} from '../../interfaces/Interceptors/everyThing-api.interface';
+import { useState, useEffect } from "react";
+import useSWR from "swr";
+import { API_ENDPOINTS, fetcher } from "../../services/api";
+import type { TSearchData, TSearchResponse } from "../../types/api-type";
+import type {
+  IUseApiSearchOptions,
+  TUseApiSearchReturn,
+} from "../../interfaces/Interceptors/api.interface";
 
-type SearchResponse = 
-  | IAirportSearchResponse 
-  | ICarSearchResponse 
-  | ISearchEverythingResponse;
-
-type SearchSuggestion = 
-  | IAirportSearchResponse['data'][0]
-  | ICarSearchResponse['data'][0]
-  | ISearchEverythingResponse['data'][0];
-
-interface UseApiSearchReturn<T> {
-  query: string;
-  setQuery: (query: string) => void;
-  suggestions: T[];
-  isLoading: boolean;
-  error: Error | undefined;
-}
-
-interface UseApiSearchOptions {
-  endpoint: keyof typeof API_ENDPOINTS;
-  enabled?: boolean;
-}
-
-export const useApiSearch = <T extends SearchSuggestion>(
-  options: UseApiSearchOptions
-): UseApiSearchReturn<T> => {
-  const { endpoint, enabled = true } = options;
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+export const useApiSearch = <T extends TSearchData>(
+  options: IUseApiSearchOptions
+): TUseApiSearchReturn<T> => {
+  const { endpoint, enabled = true, customParams } = options;
+  const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -51,24 +24,53 @@ export const useApiSearch = <T extends SearchSuggestion>(
     };
   }, [query]);
 
-  const { data, error, isLoading } = useSWR<SearchResponse>(
-    enabled && debouncedQuery.trim() !== '' 
-      ? `${API_ENDPOINTS[endpoint]}?query=${encodeURIComponent(debouncedQuery)}` 
-      : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      shouldRetryOnError: false,
-      dedupingInterval: 30000,
-    }
-  );
+  const buildUrl = () => {
+    if (!enabled) return null;
 
-  const suggestions = (data?.data || []) as T[];
+    const baseUrl = API_ENDPOINTS[endpoint];
+
+    if (endpoint === "NEARBY_AIRPORTS" && customParams) {
+      const { lat, lng } = customParams;
+      if (lat !== null && lng !== null) {
+        return `${baseUrl}?lat=${lat}&lng=${lng}`;
+      }
+      return null;
+    }
+
+    if (debouncedQuery.trim() !== "") {
+      return `${baseUrl}?query=${encodeURIComponent(debouncedQuery)}`;
+    }
+
+    return null;
+  };
+
+  const url = buildUrl();
+  console.log("API URL being called:", url);
+
+  const { data, error, isLoading } = useSWR<TSearchResponse>(url, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    dedupingInterval: 30000,
+  });
+
+  console.log("Raw API response:", data);
+
+  let responseData: T;
+
+  if (endpoint === "NEARBY_AIRPORTS") {
+    responseData = (data?.data || {
+      current: null,
+      nearby: [],
+      recent: [],
+    }) as T;
+  } else {
+    responseData = (data?.data || []) as T;
+  }
 
   return {
     query,
     setQuery,
-    suggestions,
+    data: responseData,
     isLoading,
     error,
   };

@@ -34,6 +34,7 @@ export const API_ENDPOINTS = {
   AIRPORT_SEARCH: '/api/v1/flights/searchAirport',
   SEARCH_EVERYTHING: '/api/v1/hotels/searchDestinationOrHotel',
   SEARCH_CARS_LOCATIONS: '/api/v1/cars/searchLocation',
+  NEARBY_AIRPORTS: '/api/v1/flights/getNearByAirports'
 };
 
 export const fetcher = <T>(

@@ -7,9 +7,9 @@ import { CommonStyle, SearchInputStyle } from "../styles";
 import { useSearch } from "../hooks/swr/useSearch";
 
 const flights = () => {
-  const { setQuery, suggestions, isLoading } = useSearch.airports();
+  const { setQuery, data, isLoading } = useSearch.airports();
 
-  const formattedResults = suggestions.map((suggestion) => ({
+  const formattedResults = data.map((suggestion) => ({
     text: suggestion.presentation.title,
     subText:
       suggestion.presentation.subtitle || suggestion.navigation.entityType,

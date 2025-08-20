@@ -11,7 +11,7 @@ import { useSearch } from "../hooks/swr/useSearch";
 import type { ISearchResult } from "../interfaces/components-interfaces";
 
 const Home = () => {
-  const { setQuery, suggestions, isLoading } = useSearch.everything();
+  const { setQuery, data, isLoading } = useSearch.everything();
 
   const handleResultClick = (result: ISearchResult) => {
     const searchQuery = encodeURIComponent(result.text);
@@ -19,7 +19,7 @@ const Home = () => {
     window.open(googleSearchUrl, "_blank", "noopener,noreferrer");
   };
 
-  const formattedResults = suggestions.map((suggestion) => ({
+  const formattedResults = data.map((suggestion) => ({
     text: suggestion.entityName,
     subText: suggestion.hierarchy,
     icon: getEntityIcon(suggestion.entityType),

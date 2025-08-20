@@ -60,3 +60,40 @@ export interface IAirportSearchResponse {
   timestamp: number;
   data: IAirportSuggestion[];
 }
+
+
+export interface INearbyAirport {
+  skyId?: string;
+  entityId: string;
+  presentation: {
+    title: string;
+    suggestionTitle: string;
+    subtitle: string;
+  };
+  navigation: {
+    entityId: string;
+    entityType: string;
+    localizedName: string;
+    relevantFlightParams: {
+      skyId: string;
+      entityId: string;
+      flightPlaceType: string;
+      localizedName: string;
+    };
+    relevantHotelParams?: {
+      entityId: string;
+      entityType: string;
+      localizedName: string;
+    };
+  };
+}
+
+export interface INearbyAirportsResponse {
+  status: boolean;
+  timestamp: number;
+  data: {
+    current: INearbyAirport;
+    nearby: INearbyAirport[];
+    recent: INearbyAirport[];
+  };
+}

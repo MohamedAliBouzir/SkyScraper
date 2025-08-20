@@ -1,19 +1,24 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useLocation } from "../providers/GeoLocation.provider";
 import { useEffect, useRef } from "react";
 import { CommonStyle } from "../styles";
 import PageCommonTitle from "../components/UI/PageCommonTitle";
+import { useNearbyAirportsSearch } from "../hooks/swr/useSearch";
 
 const Hotels = () => {
-  const { latitude, longitude, loading, error } = useLocation();
+  const { latitude, longitude, loading: locationLoading, error: locationError } = useLocation();
   const hasLogged = useRef(false);
+  
+  const { data: nearbyData, isLoading: nearbyLoading, error: nearbyError } = 
+    useNearbyAirportsSearch(latitude, longitude, !locationLoading && !locationError);
 
   useEffect(() => {
-    if (!hasLogged.current && !loading) {
-      console.log("Location data:", { latitude, longitude, loading, error });
+    if (!hasLogged.current && !locationLoading) {
+      console.log("Location data:", { latitude, longitude, loading: locationLoading, error: locationError });
+      console.log("Nearby airports data:", nearbyData);
       hasLogged.current = true;
     }
-  }, [latitude, longitude, loading, error]);
+  }, [latitude, longitude, locationLoading, locationError, nearbyData]);
 
   return (
     <Box sx={CommonStyle.pageWrapper}>

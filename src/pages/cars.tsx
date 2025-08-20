@@ -7,8 +7,8 @@ import GarageIcon from "@mui/icons-material/Garage";
 import { useSearch } from "../hooks/swr/useSearch";
 
 const cars = () => {
-  const { setQuery, suggestions, isLoading } = useSearch.cars();
-  const formattedResults = suggestions.map((suggestion) => ({
+  const { setQuery, data, isLoading } = useSearch.cars();
+  const formattedResults = data.map((suggestion) => ({
     text: suggestion.entity_name,
     subText: suggestion.hierarchy,
     icon: <GarageIcon />,

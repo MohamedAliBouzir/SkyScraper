@@ -32,7 +32,8 @@ apiClient.interceptors.response.use(
 export const API_ENDPOINTS = {
   CHECK_SERVER: '/api/v1/checkServer',
   AIRPORT_SEARCH: '/api/v1/flights/searchAirport',
-  SEARCH_EVERYTHING: '/api/v1/hotels/searchDestinationOrHotel'
+  SEARCH_EVERYTHING: '/api/v1/hotels/searchDestinationOrHotel',
+  SEARCH_CARS_LOCATIONS: '/api/v1/cars/searchLocation',
 };
 
 export const fetcher = <T>(

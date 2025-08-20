@@ -1,19 +1,19 @@
 import { Box } from "@mui/material";
 import SearchInput from "../components/SearchInput";
 import SearchIcon from "@mui/icons-material/Search";
-import { useSearchEverything } from "../hooks/swr/useSearchEverything";
 import { getEntityIcon } from "../utils/entityIcons";
-import type { SearchResult } from "../interfaces/components-interfaces";
 import PageCommonTitle from "../components/UI/PageCommonTitle";
 import { CommonStyle, SearchInputStyle } from "../styles";
 import GroupeButtons from "../components/GroupeButtons";
 import { MenuIcons } from "../assets/icons/Material/MenuIcons";
 import { menuItems } from "../assets/data/MenuData";
+import { useSearch } from "../hooks/swr/useSearch";
+import type { ISearchResult } from "../interfaces/components-interfaces";
 
 const Home = () => {
-  const { setQuery, suggestions, isLoading } = useSearchEverything();
+  const { setQuery, suggestions, isLoading } = useSearch.everything();
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = (result: ISearchResult) => {
     const searchQuery = encodeURIComponent(result.text);
     const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}&tcfs=UgRgAXgB`;
     window.open(googleSearchUrl, "_blank", "noopener,noreferrer");

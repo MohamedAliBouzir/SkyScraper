@@ -19,10 +19,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import _ from "lodash";
-import type { SearchInputProps } from "../interfaces/components-interfaces";
+import type { ISearchInputProps } from "../interfaces/components-interfaces";
 import { SearchInputStyle } from "../styles";
 
-const SearchInput: React.FC<SearchInputProps> = ({
+const SearchInput: React.FC<ISearchInputProps> = ({
   onSearch,
   onResultClick,
   placeholder,

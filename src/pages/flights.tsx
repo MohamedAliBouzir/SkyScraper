@@ -2,12 +2,12 @@ import { Box } from "@mui/material";
 import SearchInput from "../components/SearchInput";
 import SearchIcon from "@mui/icons-material/Search";
 import FlightIcon from "@mui/icons-material/Flight";
-import { useAirportSearch } from "../hooks/swr/useAirportSearch";
 import PageCommonTitle from "../components/UI/PageCommonTitle";
-import { CommonStyle } from "../styles";
+import { CommonStyle, SearchInputStyle } from "../styles";
+import { useSearch } from "../hooks/swr/useSearch";
 
 const flights = () => {
-  const { setQuery, suggestions, isLoading } = useAirportSearch();
+  const { setQuery, suggestions, isLoading } = useSearch.airports();
 
   const formattedResults = suggestions.map((suggestion) => ({
     text: suggestion.presentation.title,
@@ -32,12 +32,7 @@ const flights = () => {
           width={{ xs: "100%", md: "40%" }}
           results={formattedResults}
           isLoading={isLoading}
-          sx={{
-            borderRadius: "50px",
-            minWidth: "100px",
-            backgroundColor: "#fff",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.19)",
-          }}
+          sx={SearchInputStyle.searchInputHomeLayout}
         />
       </Box>
     </Box>

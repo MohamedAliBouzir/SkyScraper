@@ -3,7 +3,7 @@ import { API_ENDPOINTS, fetcher } from "../../services/api";
 import type {
   IServerStatus,
   IUseTestServerReturn,
-} from "../../interfaces/Mappers/api.interface";
+} from "../../interfaces/Interceptors/api.interface";
 
 export const useTestServer = (): IUseTestServerReturn => {
   const { data, error, isLoading, mutate } = useSWR<IServerStatus>(

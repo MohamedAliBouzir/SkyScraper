@@ -4,3 +4,4 @@ export { LoadingInterfaceStyle as LoadingScreenStyle } from "./layout/LoadingScr
 export { default as LayoutStyle } from "./layout/Wrapper.style";
 export { default as CommonTitleStyle } from "./components/CommonTitle.style";
 export { default as CommonStyle } from "./pages/common.style";
+export { default as GroupeButtonStyle } from "./components/GroupeButton.style";

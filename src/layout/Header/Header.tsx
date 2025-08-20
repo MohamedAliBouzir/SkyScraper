@@ -1,19 +1,12 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { useLocation, Link } from "react-router-dom";
-import { homeMenu, RentingMenu } from "../../menu";
 import FullLogo from "../../assets/icons/FullLogo.tsx";
 import { HeaderStyle } from "../../styles";
+import { HeaderMenuItems } from "../../assets/data/MenuData.ts";
 
 const Header: React.FC = () => {
   const location = useLocation();
-
-  const menuItems = [
-    homeMenu.homePage,
-    RentingMenu.flightsPage,
-    RentingMenu.hotelsPage,
-    RentingMenu.carsPage,
-  ];
 
   return (
     <AppBar sx={HeaderStyle.appBar}>
@@ -22,7 +15,7 @@ const Header: React.FC = () => {
           <FullLogo />
         </Box>
         <Box sx={HeaderStyle.itemsContainer}>
-          {menuItems.map((item) => (
+          {HeaderMenuItems.map((item) => (
             <Link
               to={item.path}
               key={item.id}

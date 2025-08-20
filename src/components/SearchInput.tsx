@@ -93,15 +93,21 @@ const SearchInput: React.FC<SearchInputProps> = ({
     }
   }, [searchTerm, results, hasSearched]);
 
-  const handleResultClick = useCallback((result: any) => {
-    if (onResultClick) {
-      onResultClick(result);
-    }
-    setIsDropdownOpen(false);
-  }, [onResultClick]);
+  const handleResultClick = useCallback(
+    (result: any) => {
+      if (onResultClick) {
+        onResultClick(result);
+      }
+      setIsDropdownOpen(false);
+    },
+    [onResultClick]
+  );
 
   const handleInputClick = useCallback(() => {
-    if (searchTerm.trim() !== "" && ((results?.length ?? 0) > 0 || hasSearched)) {
+    if (
+      searchTerm.trim() !== "" &&
+      ((results?.length ?? 0) > 0 || hasSearched)
+    ) {
       setIsDropdownOpen(true);
     }
   }, [searchTerm, results, hasSearched]);
@@ -112,11 +118,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
   return (
     <Box
       ref={searchRef}
+      width={width}
       sx={{
-        position: "relative",
-        width: width,
-        display: "flex",
-        justifyContent: "center",
+        ...SearchInputStyle.containingBox,
       }}
     >
       <TextField

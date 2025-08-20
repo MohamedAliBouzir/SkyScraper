@@ -17,7 +17,7 @@ export const HeaderStyle = {
   },
   PlaceHolder: {
     display: { xs: "none", md: "block" },
-    width: 48,
+    width: "8%",
   },
 };
 

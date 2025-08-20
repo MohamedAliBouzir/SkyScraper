@@ -31,6 +31,13 @@ const SearchInputStyle = {
     fontSize: "0.8rem",
     color: "text.secondary",
   },
+
+  searchInputHomeLayout: {
+    borderRadius: "50px",
+    minWidth: "100px",
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.19)",
+  },
 };
 
 export default SearchInputStyle;

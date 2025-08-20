@@ -1,6 +1,11 @@
-import { Box, Typography } from "@mui/material"
+import { Box, CircularProgress, Typography } from "@mui/material"
+import { useLocation } from "../providers/GeoLocation.provider";
 
 const hotels = () => {
+
+  const { latitude, longitude, loading, error } = useLocation();
+
+  console.log(latitude, longitude, loading, error);
   return (
     <Box
       sx={{

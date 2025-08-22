@@ -13,6 +13,8 @@ export interface ISearchInputProps {
   sx?: SxProps;
   results?: any[];
   isLoading?: boolean;
+  value?: string;
+  onValueChange?: (value: string) => void;
 }
 
 export interface ISearchResult {

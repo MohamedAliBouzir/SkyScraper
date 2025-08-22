@@ -6,3 +6,5 @@ export { default as CommonTitleStyle } from "./components/CommonTitle.style";
 export { default as CommonStyle } from "./pages/common.style";
 export { default as GroupeButtonStyle } from "./components/GroupeButton.style";
 export { default as NotFoundStyle } from "./pages/NotFound.style";
+export { default as IconsStyle } from "./components/icons.style";
+export { default as MapStyle} from "./components/Map.style";

@@ -45,15 +45,12 @@ export const useApiSearch = <T extends TSearchData>(
   };
 
   const url = buildUrl();
-  console.log("API URL being called:", url);
 
   const { data, error, isLoading } = useSWR<TSearchResponse>(url, fetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
     dedupingInterval: 30000,
   });
-
-  console.log("Raw API response:", data);
 
   let responseData: T;
 

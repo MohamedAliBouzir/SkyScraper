@@ -1,21 +1,32 @@
 import { Box } from "@mui/material";
-import SearchInput from "../components/SearchInput";
-import SearchIcon from "@mui/icons-material/Search";
-import FlightIcon from "@mui/icons-material/Flight";
 import PageCommonTitle from "../components/UI/PageCommonTitle";
-import { CommonStyle, SearchInputStyle } from "../styles";
-import { useSearch } from "../hooks/swr/useSearch";
+import { CommonStyle } from "../styles";
+import { useNearbyAirportsSearch } from "../hooks/swr/useSearch";
+import { useEffect, useRef } from "react";
+import { useGeoLocation } from "../providers/GeoLocation.provider";
+import FlightsExplore from "../components/FlightSearch";
 
 const flights = () => {
-  const { setQuery, data, isLoading } = useSearch.airports();
+  const {
+    latitude,
+    longitude,
+    loading: locationLoading,
+    error: locationError,
+  } = useGeoLocation();
+  const hasLogged = useRef(false);
 
-  const formattedResults = data.map((suggestion) => ({
-    text: suggestion.presentation.title,
-    subText:
-      suggestion.presentation.subtitle || suggestion.navigation.entityType,
-    icon: <FlightIcon />,
-    data: suggestion,
-  }));
+  const { data: nearbyData } = useNearbyAirportsSearch(
+    latitude,
+    longitude,
+    !locationLoading && !locationError
+  );
+
+  useEffect(() => {
+    if (!hasLogged.current && !locationLoading) {
+      hasLogged.current = true;
+    }
+  }, [latitude, longitude, locationLoading, locationError, nearbyData]);
+
   return (
     <Box sx={CommonStyle.pageWrapper}>
       <PageCommonTitle
@@ -25,15 +36,7 @@ const flights = () => {
         imgStyle={{ width: "100%", height: "auto", display: "block" }}
       />
       <Box sx={CommonStyle.contentWrapper}>
-        <SearchInput
-          onSearch={setQuery}
-          icon={<SearchIcon />}
-          placeholder="Search airports"
-          width={{ xs: "100%", md: "40%" }}
-          results={formattedResults}
-          isLoading={isLoading}
-          sx={SearchInputStyle.searchInputHomeLayout}
-        />
+        <FlightsExplore />
       </Box>
     </Box>
   );

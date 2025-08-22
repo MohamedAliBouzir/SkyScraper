@@ -31,11 +31,15 @@ const SearchInput: React.FC<ISearchInputProps> = ({
   results,
   isLoading = false,
   sx,
+  value: externalValue,
+  onValueChange,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [internalValue, setInternalValue] = useState<string>("");
   const [hasSearched, setHasSearched] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  const searchTerm = externalValue !== undefined ? externalValue : internalValue;
 
   const debouncedSearch = useMemo(
     () =>
@@ -59,7 +63,6 @@ const SearchInput: React.FC<ISearchInputProps> = ({
         setIsDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -69,7 +72,11 @@ const SearchInput: React.FC<ISearchInputProps> = ({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      setSearchTerm(value);
+      if (onValueChange) {
+        onValueChange(value);
+      } else {
+        setInternalValue(value);
+      }
 
       if (value.trim() === "") {
         onSearch("");
@@ -81,7 +88,7 @@ const SearchInput: React.FC<ISearchInputProps> = ({
         setIsDropdownOpen(true);
       }
     },
-    [debouncedSearch, onSearch]
+    [debouncedSearch, onSearch, onValueChange]
   );
 
   const handleInputFocus = useCallback(() => {

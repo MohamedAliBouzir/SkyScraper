@@ -23,3 +23,15 @@ export interface IUseCarSearchReturn {
   isLoading: boolean;
   error: Error | undefined;
 }
+
+export interface ICarLocation {
+  hierarchy: string;
+  location: string;
+  entity_name: string;
+  highlight: {
+    entity_name: string;
+    hierarchy: string;
+  };
+  entity_id: string;
+  class: string;
+}

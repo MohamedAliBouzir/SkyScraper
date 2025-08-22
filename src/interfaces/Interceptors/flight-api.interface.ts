@@ -75,6 +75,8 @@ export interface INearbyAirport {
     entityType: string;
     localizedName: string;
     relevantFlightParams: {
+      longitude: number;
+      latitude: number;
       skyId: string;
       entityId: string;
       flightPlaceType: string;

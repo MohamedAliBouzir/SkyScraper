@@ -19,7 +19,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useLocation = (): TBrowserLocation => {
+export const useGeoLocation = (): TBrowserLocation => {
   const context = React.useContext(LocationContext);
   if (context === undefined) {
     throw new Error("useLocation must be used within a LocationProvider");
